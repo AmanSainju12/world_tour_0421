@@ -9,18 +9,28 @@
 <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 
 <style>
-body {
+html, body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+    padding: 0;
+    overflow-x: hidden;  /* Prevent horizontal scroll */
+    width: 100%;
 }
 
 /* ================= WELCOME SCREEN ================= */
 
 #welcomeContainer {
     display: flex;
+    flex-direction: row;
     width: 100%;
     height: 100vh;
+    max-width: 100%;
+    overflow: hidden;  /* Important */
+}
+
+/* Left and Right sections */
+#welcomeLeft, #welcomeRight {
+    flex: 1;
+    max-width: 100%;  /* Important to prevent overflow */
 }
 
 /* LEFT SIDE */
