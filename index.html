@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>World Tour 💖</title>
 
 <!-- PageFlip CDN -->
@@ -80,6 +81,7 @@ body {
 
 #bookContainer {
     display: none;
+     width: 100%;
     height: 100vh;
     justify-content: center;
     align-items: center;
@@ -111,12 +113,7 @@ img {
 }
 /* RIGHT SIDE VIDEO */
 #welcomeRight {
-    flex: 1;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: black;
     overflow: hidden;
 }
 
@@ -127,35 +124,29 @@ img {
     object-fit: cover;
 }
 
-/* BIG PLAY BUTTON */
+/* Play button centered */
 #playButton {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 50px;
-    padding: 20px 40px;
-    border: none;
-    border-radius: 12px;
-    background: rgba(255, 0, 100, 0.7);
-    color: white;
-    cursor: pointer;
-    z-index: 2;
-    transition: 0.3s;
+    padding: 20px 30px;
+    border-radius: 50%;
 }
 
 #playButton:hover {
     background: rgba(255, 0, 100, 0.9);
 }
 
-/* VIDEO CONTROLS */
+/* Controls position */
 #videoControls {
     position: absolute;
-    bottom: 40px;
-    display: flex;
-    gap: 20px;
-    z-index: 2;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: none;
+    gap: 15px;
 }
 
 .control-btn {
@@ -172,10 +163,56 @@ img {
 .control-btn:hover {
     background: rgba(0,0,0,0.8);
 }
+
+/* ========== MOBILE RESPONSIVE ========== */
+@media (max-width: 768px) {
+
+    #welcomeContainer {
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    #welcomeLeft {
+        flex: none;
+        width: 100%;
+        height: 50vh;   /* half screen */
+        justify-content: center;
+        align-items: center;
+    }
+
+    #welcomeLeft h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    #welcomeLeft button {
+        width: 80%;
+        max-width: 280px;
+        font-size: 20px;
+        padding: 14px;
+        margin: 8px 0;
+    }
+
+    #welcomeRight {
+        width: 100%;
+        height: 50vh;
+    }
+}
+}
+
+button {
+    transition: all 0.3s ease;
+}
+
 </style>
 </head>
 
 <body>
+
+
+<audio id="bgMusic" loop>
+    <source src="music/bg_music.mp3" type="audio/mpeg">
+</audio>
 
 <!-- WELCOME -->
 <div id="welcomeContainer">

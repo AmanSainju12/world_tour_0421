@@ -10,10 +10,27 @@ const video = document.getElementById('bgVideo');
 const playButton = document.getElementById('playButton');
 const videoControls = document.getElementById('videoControls');
 const pauseBtn = document.getElementById('pauseBtn');
+const bgMusic = document.getElementById("bgMusic");
 
 /* ================= YES / NO EFFECT ================= */
 
 noBtn.addEventListener("mouseover", function() {
+    yesSize += 8;
+    noSize -= 4;
+
+    yesBtn.style.fontSize = yesSize + "px";
+    noBtn.style.fontSize = noSize + "px";
+
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+    if (noSize <= 8) {
+        noBtn.style.display = "none";
+    }
+});
+
+noBtn.addEventListener("touchstart", function() {
     yesSize += 8;
     noSize -= 4;
 
@@ -46,6 +63,10 @@ setInterval(() => {
 }, 500);
 
 /* ================= LOAD BOOK ================= */
+
+window.addEventListener("resize", () => {
+    location.reload();
+})
 
 yesBtn.addEventListener("click", function() {
 
@@ -97,42 +118,75 @@ yesBtn.addEventListener("click", function() {
             bookElement.appendChild(page);
         }
 
-        const pageFlip = new St.PageFlip(
-            bookElement,
-            {
-                width: 400,
-                height: 600,
-                showCover: true,
-                mobileScrollSupport: false
-            }
-        );
+        const isMobile = window.innerWidth < 768;
+
+        const pageFlip = new St.PageFlip(bookElement, {
+            width: isMobile ? 300 : 400,
+            height: isMobile ? 450 : 600,
+            size: "stretch",
+            minWidth: 280,
+            maxWidth: 600,
+            minHeight: 400,
+            maxHeight: 800,
+            showCover: true,
+            mobileScrollSupport: true,
+            useMouseEvents: true,
+            swipeDistance: 30,
+        });
 
         pageFlip.loadFromHTML(document.querySelectorAll(".page"));
 
     }, 1000);
 });
 
-// ================= BIG PLAY BUTTON =================
-playButton.addEventListener('click', function() {
-    video.muted = false;   // enable sound
+/* ========= PLAY BUTTON ========= */
+playButton.addEventListener("click", function () {
     video.play();
-    playButton.style.display = 'none';
-    videoControls.style.display = 'flex';
+    video.muted = false;
+    playButton.style.display = "none";
+    videoControls.style.display = "flex";
 });
 
-// ================= PAUSE / PLAY BUTTON =================
-pauseBtn.addEventListener('click', function() {
-    if(video.paused) {
+/* ========= PAUSE / PLAY TOGGLE ========= */
+pauseBtn.addEventListener("click", function () {
+    if (video.paused) {
         video.play();
-        pauseBtn.textContent = "⏸ Pause";
+        pauseBtn.textContent = "⏸";
     } else {
         video.pause();
-        pauseBtn.textContent = "▶ Play";
+        pauseBtn.textContent = "▶";
     }
 });
 
-// ================= MUTE / UNMUTE =================
-muteBtn.addEventListener('click', function() {
+/* ========= MUTE / UNMUTE ========= */
+muteBtn.addEventListener("click", function () {
     video.muted = !video.muted;
-    muteBtn.textContent = video.muted ? "🔊 Unmute" : "🔇Mute";
+
+    if (video.muted) {
+        muteBtn.textContent = "🔇";
+    } else {
+        muteBtn.textContent = "🔊";
+    }
 });
+
+
+/* ========= Sync UI if user uses native controls ========= */
+video.addEventListener("play", () => {
+    pauseBtn.textContent = "⏸";
+});
+
+video.addEventListener("pause", () => {
+    pauseBtn.textContent = "▶";
+});
+
+function enableAutoplay() {
+    bgMusic.volume = 0.5;
+    bgMusic.play().catch(() => {});
+    
+    document.removeEventListener("click", enableAutoplay);
+    document.removeEventListener("touchstart", enableAutoplay);
+}
+
+// Trigger on FIRST interaction anywhere
+document.addEventListener("click", enableAutoplay);
+document.addEventListener("touchstart", enableAutoplay);
